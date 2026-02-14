@@ -17,9 +17,7 @@ export default async function handler(req, res) {
     try {
         const apiKey = process.env.VINCARIO_API_KEY;
         const secretKey = process.env.VINCARIO_SECRET;
-        // According to some docs, ID can be the service identifier like 'decode'
-        // We will try 'decode' as the default ID if not provided.
-        const id = process.env.VINCARIO_ID || "decode";
+        const id = "decode"; // Fixed ID for VIN decoding service
 
         if (!apiKey || !secretKey) {
             throw new Error('Server configuration error: Missing API Key or Secret');
@@ -35,11 +33,10 @@ export default async function handler(req, res) {
         const controlSum = shasum.digest('hex').substring(0, 10);
 
         // 4. Call Vincario API
-        // Endpoint: https://api.vincario.com/3.2/{ID}/{ControlSum}/{VIN}.json
-        // Ensure we are using the correct endpoint structure.
-        const endpoint = `https://api.vincario.com/3.2/${id}/${controlSum}/${upperVin}.json`;
+        // Correct URL Structure: https://api.vincario.com/3.2/{API_KEY}/{ControlSum}/decode/{VIN}.json
+        const endpoint = `https://api.vincario.com/3.2/${apiKey}/${controlSum}/decode/${upperVin}.json`;
 
-        console.log(`Calling Vincario: ${endpoint} (Masked Key)`); // Log for Vercel logs
+        console.log(`Calling Vincario URL structure: .../${controlSum}/decode/...`);
 
         const response = await fetch(endpoint);
 
