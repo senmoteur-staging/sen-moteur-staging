@@ -43,19 +43,18 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         // 4. Map Fields
-        // Robust mapping ensuring we catch fields whether they are at root or inside 'vehicle' object
-        const v = data.vehicle || {};
+        // Mapped according to Auto.dev V2 documentation
         const vehicle = {
-            make: data.make?.name || data.make || v.make,
-            model: data.model?.name || data.model || v.model,
-            year: data.years?.[0]?.year || data.year || v.year,
-            manufacturer: data.manufacturer?.name || data.manufacturer || v.manufacturer,
-            engine: data.engine?.name || data.engine || v.engine,
-            transmission: data.transmission?.name || data.transmission || v.transmission,
-            fuelType: data.fuelType || v.fuelType,
-            driveType: data.drivenWheels || v.driveType,
-            seating: data.passengerCapacity || v.seating,
-            extras: data.options || [],
+            make: data.make || data.vehicle?.make,
+            model: data.model || data.vehicle?.model,
+            year: data.year || data.vehicle?.year,
+            manufacturer: data.manufacturer || data.vehicle?.manufacturer,
+            engine: data.engine, // Top level in docs
+            transmission: data.transmission, // Top level in docs
+            fuelType: data.fuelType,
+            driveType: data.drive, // Docs say 'drive', not 'drivenWheels'
+            seating: data.seating, // Not explicitly in example, keeping as fallback
+            extras: data.style ? [data.style, data.trim, data.body].filter(Boolean) : [], // Construct extras from style/trim/body
             raw: data
         };
 
