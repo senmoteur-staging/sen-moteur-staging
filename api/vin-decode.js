@@ -43,17 +43,18 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         // 4. Map Fields
-        // Based on Auto.dev v2 response structure provided by user
+        // Robust mapping ensuring we catch fields whether they are at root or inside 'vehicle' object
+        const v = data.vehicle || {};
         const vehicle = {
-            make: data.make?.name || data.make,
-            model: data.model?.name || data.model,
-            year: data.years?.[0]?.year || data.year, // Handle potential array or direct year
-            manufacturer: data.manufacturer?.name || data.manufacturer,
-            engine: data.engine?.name || data.engine,
-            transmission: data.transmission?.name || data.transmission,
-            fuelType: data.fuelType, // Often direct string
-            driveType: data.drivenWheels,
-            seating: data.passengerCapacity,
+            make: data.make?.name || data.make || v.make,
+            model: data.model?.name || data.model || v.model,
+            year: data.years?.[0]?.year || data.year || v.year,
+            manufacturer: data.manufacturer?.name || data.manufacturer || v.manufacturer,
+            engine: data.engine?.name || data.engine || v.engine,
+            transmission: data.transmission?.name || data.transmission || v.transmission,
+            fuelType: data.fuelType || v.fuelType,
+            driveType: data.drivenWheels || v.driveType,
+            seating: data.passengerCapacity || v.seating,
             extras: data.options || [],
             raw: data
         };
