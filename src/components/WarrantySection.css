@@ -1,0 +1,130 @@
+.warranty-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-bg-alt);
+}
+
+.warranty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.warranty-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg) var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.warranty-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.warranty-card.featured {
+    border: 2px solid var(--color-accent);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+    z-index: 2;
+}
+
+.warranty-card.featured:hover {
+    transform: scale(1.05) translateY(-8px);
+    box-shadow: var(--shadow-premium);
+}
+
+.card-tag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent);
+    color: white;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.plan-name {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.plan-duration {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+}
+
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.plan-desc {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+}
+
+.plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+.plan-features li::before {
+    content: '✓';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+@media (max-width: 900px) {
+    .warranty-card.featured {
+        transform: none;
+    }
+
+    .warranty-card.featured:hover {
+        transform: translateY(-8px);
+    }
+}

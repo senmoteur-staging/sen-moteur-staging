@@ -1,0 +1,132 @@
+.logistics-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-bg-alt);
+    overflow: hidden;
+}
+
+.logistics-map {
+    position: relative;
+    height: 300px;
+    margin: var(--spacing-lg) 0;
+    background: radial-gradient(circle at center, #e2e8f0 0%, transparent 70%);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.route-visual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    max-width: 600px;
+    position: relative;
+    z-index: 10;
+}
+
+.point {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+}
+
+.point-label {
+    width: 50px;
+    height: 50px;
+    background: var(--color-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--color-accent);
+}
+
+.city-name {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.route-line {
+    flex-grow: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--color-accent) 0, var(--color-accent) 10px, transparent 10px, transparent 20px);
+    position: relative;
+    margin: 0 20px;
+}
+
+.ship-icon {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    animation: sail 4s linear infinite;
+    background: var(--color-bg-alt);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes sail {
+    0% {
+        left: 0%;
+        transform: translate(-50%, -50%) rotate(-5deg);
+    }
+
+    25% {
+        transform: translate(-50%, -60%) rotate(5deg);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(-5deg);
+    }
+
+    75% {
+        transform: translate(-50%, -60%) rotate(5deg);
+    }
+
+    100% {
+        left: 100%;
+        transform: translate(-50%, -50%) rotate(-5deg);
+    }
+}
+
+.logistics-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.feature-item {
+    background: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
+    border: 1px solid var(--color-border);
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-item h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.feature-item p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
