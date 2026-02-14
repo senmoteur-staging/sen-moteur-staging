@@ -15,9 +15,11 @@ export default async function handler(req, res) {
     }
 
     try {
-        const apiKey = process.env.VINCARIO_API_KEY; // User has this
-        const secretKey = process.env.VINCARIO_SECRET; // User has this
-        const id = process.env.VINCARIO_ID || "no-id"; // Fallback if no ID provided
+        const apiKey = process.env.VINCARIO_API_KEY;
+        const secretKey = process.env.VINCARIO_SECRET;
+        // According to some docs, ID can be the service identifier like 'decode'
+        // We will try 'decode' as the default ID if not provided.
+        const id = process.env.VINCARIO_ID || "decode";
 
         if (!apiKey || !secretKey) {
             throw new Error('Server configuration error: Missing API Key or Secret');
@@ -25,30 +27,27 @@ export default async function handler(req, res) {
 
         // 3. Generate Control Sum (Authentication)
         // Formula: SHA1(VIN|ID|API Key|Secret Key).substring(0, 10)
-        // If ID is not used, maybe just VIN|API Key|Secret Key? 
-        // Based on docs: VIN|ID|APIKey|Secret
-        // Let's assume ID is required. If user has no ID, maybe they mean API Key is ID?
-        // Strategy: Try using API Key as ID if no ID env var is present.
-
-        const usedId = process.env.VINCARIO_ID || apiKey;
-
-        const dataToHash = `${vin}|${usedId}|${apiKey}|${secretKey}`;
+        // VIN must be uppercase.
+        const upperVin = vin.toUpperCase();
+        const dataToHash = `${upperVin}|${id}|${apiKey}|${secretKey}`;
         const shasum = crypto.createHash('sha1');
         shasum.update(dataToHash);
         const controlSum = shasum.digest('hex').substring(0, 10);
 
         // 4. Call Vincario API
-        // Endpoint: https://api.vincario.com/3.2/{ID}/{ControlSum}/STOLEN/{VIN}.json (Example)
-        // But user wants decode. 
-        // Endpoint: https://api.vincario.com/3.2/{ID}/{ControlSum}/decode/{VIN}.json
+        // Endpoint: https://api.vincario.com/3.2/{ID}/{ControlSum}/{VIN}.json
+        // Ensure we are using the correct endpoint structure.
+        const endpoint = `https://api.vincario.com/3.2/${id}/${controlSum}/${upperVin}.json`;
 
-        const endpoint = `https://api.vincario.com/3.2/${usedId}/${controlSum}/decode/${vin}.json`;
+        console.log(`Calling Vincario: ${endpoint} (Masked Key)`); // Log for Vercel logs
 
         const response = await fetch(endpoint);
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Vincario API Error: ${response.status} ${errorText}`);
+            console.error('Vincario Error Body:', errorText);
+            // Return the actual error to the frontend for debugging
+            throw new Error(`Vincario API Error: ${response.status} ${errorText.substring(0, 200)}`);
         }
 
         const data = await response.json();
